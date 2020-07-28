@@ -6,7 +6,6 @@ var cors = require('cors')
 
 var app = express()
 app.use(cors())
-const port = 5000
 app.use(bodyParser.json())
 mongoose.connect("mongodb+srv://bansalkrishna:bansal@cluster0-fukdt.mongodb.net/<dbname>?retryWrites=true&w=majority", err => {
     if (err) {
@@ -19,6 +18,8 @@ mongoose.connect("mongodb+srv://bansalkrishna:bansal@cluster0-fukdt.mongodb.net/
 })
 
 app.use('/', api)
+
+const port = process.env.PORT || 5000;
 
 app.listen(port, (req, res) => {
     console.log(`Server running at port ${port}`)
