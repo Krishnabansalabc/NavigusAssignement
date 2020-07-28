@@ -5,6 +5,7 @@ import Navbar from './components/Navbar'
 import Landing from './components/Landing'
 import Login from './components/Login'
 import Register from './components/signup';
+import VisitedViewer from './components/VisitedViewer';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <Route exact path='/' component={Landing} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-
+        <Route path="/viewers" component={VisitedViewer} />
       </div>
     </Router>
 

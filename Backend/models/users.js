@@ -8,6 +8,9 @@ var userDetails = new mongoose.Schema({
     },
     password: String,
     token: String,
+    lastVisited: {
+        type: String,
+    }
 })
 
 module.exports = mongoose.model("User", userDetails);

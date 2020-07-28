@@ -26,6 +26,7 @@ router.post('/login', function (req, res) {
             }
             var token = jwt.sign(payload, process.env.SECRET_KEY);
             user.token = token;
+            user.lastVisited = new Date().toString();
             user.save(function (err, user) {
                 if (err) return err;
                 res.status(200)
@@ -60,7 +61,7 @@ router.post('/register', function (req, res) {
 
 
 router.get("/logout", (req, res) => {
-    User.findOneAndUpdate({ username: req.body.username }, { token: "" }, (err, cb) => {
+    User.updateOne({ username: req.body.username }, { $set: { token: "", lastVisited: new Date().toString() } }, (err, cb) => {
         if (err) return res.json({
             success: false, err
         });
@@ -71,12 +72,23 @@ router.get("/logout", (req, res) => {
 });
 
 router.post("/liveuser", (req, res) => {
-    User.find({ token: { $not: { $eq: "" } } }, { name: 1, _id: 0 }, (err, data) => {
+    User.find({ token: { $ne: "" } }, (err, data) => {
         if (err) return res.json({
             success: false, err
         });
-        console.log("krishna");
-        console.log(data);
+        //console.log("krishna");
+        // console.log(data);
+        return res.status(200).send(data);
+    })
+})
+
+router.get('/viewers', (req, res) => {
+    User.find({ lastVisited: { $exists: true } }, { name: 1, username: 1, lastVisited: 1, _id: 0 }, (err, data) => {
+        if (err) return res.json({
+            success: false, err
+        });
+        //console.log("krishna");
+        //console.log(data);
         return res.status(200).send(data);
     })
 })
