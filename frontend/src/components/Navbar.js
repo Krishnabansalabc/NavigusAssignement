@@ -1,30 +1,71 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
+import Avatar from 'react-avatar';
+import { logout, liveUser } from './userFunctions';
+import jwt_decode from 'jwt-decode'
+import Tooltip from '@material-ui/core/Tooltip';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 const heading = {
-  color: 'white'
+  color: 'white',
+  marginTop: '-5px',
 }
 export class Navbar extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      name: '',
+      names: [],
+    }
+  };
   logOut(e) {
     e.preventDefault()
-    localStorage.removeItem('usertoken')
-    this.props.history.push(`/`)
+
+    const data = {
+      username: this.state.username,
+      password: this.state.password,
+    }
+    logout(data).then(res => {
+      if (!localStorage.usertoken) {
+        this.props.history.push(`/`);
+      }
+    })
   }
 
-  constructor(props) {
-    super(props);
+  componentDidMount = () => {
+    let {
+      names,
+    } = this.state;
+    if (localStorage.length > 0) {
+      const token = localStorage.usertoken
+      const decoded = jwt_decode(token)
+      liveUser().then(res => {
+        this.setState({ names: res.data })
+      })
+      console.log(this.state.names);
+      this.setState({
+        name: decoded.name
+      })
 
+    }
   }
+
 
   render() {
 
+    const {
+      names,
+    } = this.state;
+
+
+
     const withOutUser = (
-      <h5 className='content'>Welcome user</h5>
+      <h5 className='content' style={{ color: 'white' }}>Welcome user</h5>
     )
 
     const withUser = (
-      <h5 className='content'>Welcome</h5>
+      <h5 className='content' style={{ color: 'white' }}>Welcome</h5>
     )
     const withOutLogin = (
       <ul className="navbar-nav">
@@ -43,12 +84,20 @@ export class Navbar extends Component {
 
 
     const withLogin = (
+
+
+
       <ul className="navbar-nav">
-        <li className="nav-item">
+        <li className="nav-item" style={{ marginRight: '400px', marginTop: '8px' }}>
           <a style={heading} href="" onClick={this.logOut.bind(this)} className="nav-link">
             Logout
               </a>
         </li>
+        {names.map(name => {
+          return (
+            <li className="nav-item" style={{ marginLeft: '-20px', position: 'right' }}><Tooltip title={name.name}><Avatar name={name.name} round={true} size='50px' /></Tooltip></li>
+          );
+        })}
       </ul>
     )
 
@@ -65,6 +114,7 @@ export class Navbar extends Component {
         >
           <span className="navbar-toggler-icon" />
         </button>
+
         {localStorage.usertoken ? withUser : withOutUser}
 
         <div

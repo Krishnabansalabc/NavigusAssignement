@@ -1,8 +1,6 @@
 var express = require('express')
 var router = express.Router()
 var jwt = require('jsonwebtoken')
-var cors = require('cors')
-
 var User = require('../models/users')
 
 process.env.SECRET_KEY = 'secret'
@@ -26,9 +24,13 @@ router.post('/login', function (req, res) {
                 name: user.name,
                 username: user.username
             }
-            let token = jwt.sign(payload, process.env.SECRET_KEY)
-            res.status(200).send(token)
-
+            var token = jwt.sign(payload, process.env.SECRET_KEY);
+            user.token = token;
+            user.save(function (err, user) {
+                if (err) return err;
+                res.status(200)
+                    .send(token);
+            });
         }
     })
 
@@ -50,14 +52,34 @@ router.post('/register', function (req, res) {
             const user = new User(userData);
             user.save({ userData }, (error, doc) => {
                 if (error) return res.json({ success: false, error });
-                return res.status(200).json({
-                    loginSuccess: true,
-                    user: doc
-                });
+                return res.status(200).send(doc);
             })
         }
     });
 });
+
+
+router.get("/logout", (req, res) => {
+    User.findOneAndUpdate({ username: req.body.username }, { token: "" }, (err, cb) => {
+        if (err) return res.json({
+            success: false, err
+        });
+        return res.status(200).send({
+            success: true
+        });
+    });
+});
+
+router.post("/liveuser", (req, res) => {
+    User.find({ token: { $not: { $eq: "" } } }, { name: 1, _id: 0 }, (err, data) => {
+        if (err) return res.json({
+            success: false, err
+        });
+        console.log("krishna");
+        console.log(data);
+        return res.status(200).send(data);
+    })
+})
 
 
 module.exports = router

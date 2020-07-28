@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-let userRegistered = false;
-
 export const login = user => {
   return axios
     .post('http://localhost:5000/login', {
@@ -23,14 +21,33 @@ export const signup = user => {
     name: user.name,
     username: user.username,
     password: user.password,
+    token: "",
   })
     .then(response => {
       console.log('Registered')
-      userRegistered = true;
+      return response.data;
     })
     .catch(err => {
       console.log("ERROR!!")
     })
 }
 
-export { userRegistered };
+export const logout = user => {
+  return axios.get('http://localhost:5000/logout', {
+    username: user.username,
+    password: user.password
+  }).then(response => {
+    localStorage.removeItem('usertoken')
+  }).catch(err => {
+    console.log(err)
+  })
+}
+
+export const liveUser = user => {
+  return axios.post('http://localhost:5000/liveuser')
+    .then(response => {
+      return response;
+    }).catch(err => {
+      console.log(err);
+    })
+}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { login, register, signup, userRegistered } from './userFunctions'
+import { login, register, signup } from './userFunctions'
 
 class Register extends Component {
     constructor() {
@@ -27,11 +27,11 @@ class Register extends Component {
             password: this.state.password,
         }
         signup(data).then(res => {
-            if (userRegistered === 'true') {
-                this.props.history.push(`/login`);
+            if (res) {
+                this.props.history.push('/login');
             } else {
-                window.alert("Username already exist, try another username.");
-                this.props.history.push(`/register`);
+                alert("username already defined");
+                this.props.history.push('/register');
             }
         })
     }
