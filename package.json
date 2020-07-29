@@ -8,8 +8,10 @@
         "npm": "5.6.0"
     },
     "scripts": {
-        "start": "node index.js",
-        "heroku-postbuild": "cd Client && npm install && npm run start"
+        "backend": "node index.js",
+        "start": "concurrently \"npm run backend\" \"npm run start --prefix Client\"",
+        "frontend": "npm run start --prefix client",
+        "dev": "concurrently \"npm run backend\" \"npm run start --prefix Client\""
     },
     "author": "Krishna Bansal",
     "license": "ISC",
