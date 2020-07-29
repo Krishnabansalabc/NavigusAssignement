@@ -60,15 +60,31 @@ router.post('/register', function (req, res) {
 });
 
 
-router.get("/logout", (req, res) => {
-    User.updateOne({ username: req.body.username }, { $set: { token: "", lastVisited: new Date().toString() } }, (err, cb) => {
-        if (err) return res.json({
-            success: false, err
-        });
-        return res.status(200).send({
-            success: true
-        });
-    });
+router.post("/logout", (req, res) => {
+    let userData = req.body
+    //console.log("userData for logout", userData);
+    User.findOne({ token: userData.token }, (error, user) => {
+        if (error) {
+            console.log(error)
+        } else if (!user) {
+            res.status(401).send("Invalid Username")
+        }
+        else {
+
+            const payload = {
+                _id: user._id,
+                name: user.name,
+                username: user.username
+            }
+            //var token = jwt.sign(payload, process.env.SECRET_KEY);
+            user.token = "";
+            user.lastVisited = new Date().toString();
+            user.save(function (err, user) {
+                if (err) return err;
+                res.status(200).json({ success: true });
+            });
+        }
+    })
 });
 
 router.post("/liveuser", (req, res) => {
@@ -77,7 +93,7 @@ router.post("/liveuser", (req, res) => {
             success: false, err
         });
         //console.log("krishna");
-        // console.log(data);
+        //console.log(data);
         return res.status(200).send(data);
     })
 })

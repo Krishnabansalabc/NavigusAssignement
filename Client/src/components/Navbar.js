@@ -4,7 +4,6 @@ import Avatar from 'react-avatar';
 import { logout, liveUser } from './userFunctions';
 import jwt_decode from 'jwt-decode'
 import Tooltip from '@material-ui/core/Tooltip';
-import zIndex from '@material-ui/core/styles/zIndex';
 
 const heading = {
   color: 'white',
@@ -16,6 +15,7 @@ export class Navbar extends Component {
     super(props)
     this.state = {
       name: '',
+      username: '',
       names: [],
     }
   };
@@ -24,8 +24,9 @@ export class Navbar extends Component {
 
     const data = {
       username: this.state.username,
-      password: this.state.password,
+      token: this.state.token,
     }
+    //console.log(data);
     logout(data).then(res => {
       if (!localStorage.usertoken) {
         this.props.history.push(`/`);
@@ -34,9 +35,6 @@ export class Navbar extends Component {
   }
 
   componentDidMount = () => {
-    let {
-      names,
-    } = this.state;
     if (localStorage.length > 0) {
       const token = localStorage.usertoken
       const decoded = jwt_decode(token)
@@ -45,7 +43,8 @@ export class Navbar extends Component {
       })
       console.log(this.state.names);
       this.setState({
-        name: decoded.name
+        name: decoded.name,
+        token: token
       })
 
     }

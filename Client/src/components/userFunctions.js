@@ -33,11 +33,12 @@ export const signup = user => {
 }
 
 export const logout = user => {
-  return axios.get('http://localhost:5000/logout', {
+  return axios.post('http://localhost:5000/logout', {
     username: user.username,
-    password: user.password
+    token: user.token
   }).then(response => {
-    localStorage.removeItem('usertoken')
+    console.log(response)
+    localStorage.removeItem('usertoken');
   }).catch(err => {
     console.log(err)
   })

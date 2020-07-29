@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Name from './Name'
 
- class Landing extends Component {
-    render() {
+class Landing extends Component {
+  render() {
 
-      const withOutLog= (
+    const withOutLog = (
 
-        <div className="container">
+      <div className="container">
         <div className="jumbotron mt-5">
           <div className="col-sm-8 mx-auto">
             <h1 className="text-center">WELCOME to Project Manager</h1>
@@ -16,30 +16,30 @@ import Name from './Name'
           </div>
         </div>
       </div>
-      )    
+    )
 
-      const withLog=(
-        
-        <div className="container">
+    const withLog = (
+
+      <div className="container">
         <div className="jumbotron mt-5">
           <div className="col-sm-8 mx-auto">
             <h1 className="text-center">WELCOME to Project Manager</h1>
             <div className="container">
-            <Name/>
+              <Name />
             </div>
-         </div>
+          </div>
         </div>
       </div>
-      )
+    )
 
-        return (
-         <div>
-         {
-           localStorage.length?withLog:withOutLog
-         }
-         </div>
-        )
-    }
+    return (
+      <div>
+        {
+          localStorage.length ? withLog : withOutLog
+        }
+      </div>
+    )
+  }
 }
 
 export default Landing
