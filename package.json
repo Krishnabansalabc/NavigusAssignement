@@ -8,8 +8,8 @@
         "npm": "5.6.0"
     },
     "scripts": {
-        "start": "node Server/index.js",
         "backend": "nodemon Server/index.js",
+        "start": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
         "frontend": "npm run start --prefix client",
         "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\""
     },
