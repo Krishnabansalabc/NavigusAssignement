@@ -1,0 +1,37 @@
+{
+    "name": "NavigusAssignement",
+    "version": "1.0.0",
+    "description": "Navigus-Assignment",
+    "main": "index.js",
+    "engine": {
+        "node": "8.11.1",
+        "npm": "5.6.0"
+    },
+    "scripts": {
+        "start": "node Server/index.js",
+        "backend": "nodemon Server/index.js",
+        "frontend": "npm run start --prefix client",
+        "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\""
+    },
+    "author": "Krishna Bansal",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.18.3",
+        "cookie-parser": "^1.4.3",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-jwt": "^5.3.3",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.4.20",
+        "morgan": "^1.10.0",
+        "nodeman": "^1.1.2",
+        "slugify": "^1.4.0",
+        "prop-types": "^15.7.2",
+        "react-avatar": "^3.9.7"
+    },
+    "devDependencies": {
+        "http-proxy-middleware": "^1.0.4",
+        "nodemon": "^2.0.4"
+    }
+}
